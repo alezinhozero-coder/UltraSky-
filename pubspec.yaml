@@ -1,7 +1,7 @@
 name: ultrasky
-description: "UltraSky - TV e Canais"
+description: UltraSky — O App do Futuro
 publish_to: 'none'
-version: 1.2.0+1
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -9,8 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: ^6.3.0
-  shared_preferences: ^2.3.0
+  cupertino_icons: ^1.0.6
 
 flutter:
   uses-material-design: true

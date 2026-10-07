@@ -6,9 +6,9 @@ void main() {
 }
 
 // ============================================================
-// 📺 ULTRA SKY — COM REPRODUÇÃO DE VÍDEO ✅
+// 📺 ULTRA SKY — VERSÃO CORRIGIDA ✅
 // Criado por Alessandro P Abreu & Dola
-// © 2026 — Versão 1.2.0
+// © 2026 — Funciona no GitHub Actions!
 // ============================================================
 
 class UltraSky extends StatefulWidget {
@@ -26,15 +26,13 @@ class _UltraSkyState extends State<UltraSky> {
   bool _modoEscuro = true;
   bool _notificacoes = true;
   bool _som = true;
-  bool _protecao = true;
   bool _autoRecarregar = true;
-  String _qualidadeVideo = 'Alta';
 
   // 📡 LISTA M3U
   final TextEditingController _controladorM3U = TextEditingController();
   String? _urlM3USalva;
 
-  // 📺 CANAIS COM LINKS DE REPRODUÇÃO ✅
+  // 📺 CANAIS
   final List<Map<String, dynamic>> _canais = [
     {
       'nome': '📺 TV Brasil',
@@ -123,22 +121,27 @@ class _UltraSkyState extends State<UltraSky> {
   int get _totalEstaveis => _canais.where((c) => c['estavel'] == true).length;
   String _statusCanal(bool e) => e ? '✅ Estável' : '⚠️ Instável';
 
-  // ▶️ FUNÇÃO REPRODUZIR CANAL ✅
+  // ▶️ REPRODUZIR CANAL
   Future<void> _reproduzirCanal(Map<String, dynamic> canal) async {
     final link = canal['link'] as String;
 
     if (link.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('📡 Link ainda não disponível — adicione na Lista M3U!'), backgroundColor: Colors.orange),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('📡 Link ainda não disponível — adicione na Lista M3U!'), backgroundColor: Colors.orange),
+        );
+      }
       return;
     }
 
-    final uri = Uri.parse(link);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
+    try {
+      final uri = Uri.parse(link);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Não foi possível abrir';
+      }
+    } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('❌ Não foi possível abrir o link'), backgroundColor: Colors.red),
@@ -336,7 +339,7 @@ class _UltraSkyState extends State<UltraSky> {
     );
   }
 
-  // 📺 TELA CANAIS — COM BOTÃO DE ASSISTIR FUNCIONAL ✅
+  // 📺 TELA CANAIS
   Widget _telaCanais() {
     return Column(
       children: [
